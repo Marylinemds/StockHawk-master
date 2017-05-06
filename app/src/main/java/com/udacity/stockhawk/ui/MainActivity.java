@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,6 +17,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,13 +101,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (!networkUp() && adapter.getItemCount() == 0) {
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_network));
+            error.setContentDescription(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
         } else if (!networkUp()) {
             swipeRefreshLayout.setRefreshing(false);
+            error.setContentDescription(getString(R.string.toast_no_connectivity));
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
         } else if (PrefUtils.getStocks(this).size() == 0) {
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_stocks));
+            error.setContentDescription(getString(R.string.error_no_stocks));
             error.setVisibility(View.VISIBLE);
         } else {
             error.setVisibility(View.GONE);
@@ -158,9 +163,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
     private void setDisplayModeMenuItemIcon(MenuItem item) {
+
         if (PrefUtils.getDisplayMode(this)
                 .equals(getString(R.string.pref_display_mode_absolute_key))) {
             item.setIcon(R.drawable.ic_percentage);
+
         } else {
             item.setIcon(R.drawable.ic_dollar);
         }
@@ -168,8 +175,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Button buttonView = new Button(this, null, android.R.attr.actionButtonStyle);
+        buttonView.setContentDescription("Content description");
+
         getMenuInflater().inflate(R.menu.main_activity_settings, menu);
-        MenuItem item = menu.findItem(R.id.action_change_units);
+        final MenuItem item = menu.findItem(R.id.action_change_units);
+        item.setActionView(buttonView);
+
+        buttonView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                onOptionsItemSelected(item);
+            }
+        });
         setDisplayModeMenuItemIcon(item);
         return true;
     }
