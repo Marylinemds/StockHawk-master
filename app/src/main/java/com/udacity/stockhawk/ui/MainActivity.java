@@ -2,6 +2,7 @@ package com.udacity.stockhawk.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -204,5 +205,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openGraph(View view){
+
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+        //intent.putExtra("MyQuote", symbol);
+        startActivity(intent);
     }
 }
