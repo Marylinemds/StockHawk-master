@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onClick(String symbol) {
         Timber.d("Symbol clicked: %s", symbol);
+
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+        intent.putExtra("MyQuote", symbol);
+        startActivity(intent);
+
     }
 
     @Override
@@ -168,28 +173,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (PrefUtils.getDisplayMode(this)
                 .equals(getString(R.string.pref_display_mode_absolute_key))) {
             item.setIcon(R.drawable.ic_percentage);
+            item.setTitle("percentage");
 
         } else {
             item.setIcon(R.drawable.ic_dollar);
+            item.setTitle("dollar");
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //Button buttonView = new Button(this, null, android.R.attr.actionButtonStyle);
-        //buttonView.setContentDescription("Content description");
+
 
         getMenuInflater().inflate(R.menu.main_activity_settings, menu);
         final MenuItem item = menu.findItem(R.id.action_change_units);
-        //item.setActionView(buttonView);
 
-        //buttonView.setOnClickListener(new View.OnClickListener() {
-
-        //    @Override
-        //    public void onClick(View view) {
-        //        onOptionsItemSelected(item);
-        //    }
-        //});
         setDisplayModeMenuItemIcon(item);
         return true;
     }
@@ -207,10 +205,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    public void openGraph(View view){
 
-        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-        //intent.putExtra("MyQuote", symbol);
-        startActivity(intent);
-    }
 }

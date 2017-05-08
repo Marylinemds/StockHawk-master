@@ -25,7 +25,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-      /*  Intent intent = getIntent();
+        Intent intent = getIntent();
 
         if (intent != null) {
             if (intent.hasExtra("MyQuote")) {
@@ -34,7 +34,6 @@ public class DetailsActivity extends AppCompatActivity {
 
             }}
 
-*/
 
         setContentView(R.layout.activity_details);
     }
