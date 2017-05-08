@@ -175,20 +175,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Button buttonView = new Button(this, null, android.R.attr.actionButtonStyle);
-        buttonView.setContentDescription("Content description");
+        //Button buttonView = new Button(this, null, android.R.attr.actionButtonStyle);
+        //buttonView.setContentDescription("Content description");
 
         getMenuInflater().inflate(R.menu.main_activity_settings, menu);
         final MenuItem item = menu.findItem(R.id.action_change_units);
-        item.setActionView(buttonView);
+        //item.setActionView(buttonView);
 
-        buttonView.setOnClickListener(new View.OnClickListener() {
+        //buttonView.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                onOptionsItemSelected(item);
-            }
-        });
+        //    @Override
+        //    public void onClick(View view) {
+        //        onOptionsItemSelected(item);
+        //    }
+        //});
         setDisplayModeMenuItemIcon(item);
         return true;
     }
