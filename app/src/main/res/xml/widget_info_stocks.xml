@@ -5,4 +5,4 @@
     android:minHeight="@dimen/widget_stocks_default_height"
     android:minWidth="@dimen/widget_stocks_default_width"
     android:resizeMode="vertical"
-    android:updatePeriodMillis="0" />
+    android:updatePeriodMillis="300000" />

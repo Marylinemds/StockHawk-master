@@ -31,7 +31,7 @@ public class StockWidgetProvider extends AppWidgetProvider {
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
-            views.setOnClickPendingIntent(R.id.widget, pendingIntent);
+            views.setOnClickPendingIntent(R.id.title_widget, pendingIntent);
 
             Intent widgetIntent = new Intent(context, StockWidgetIntentService.class);
             launchIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);

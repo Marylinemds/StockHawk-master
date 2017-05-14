@@ -8,12 +8,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Binder;
 import android.support.annotation.Nullable;
+import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.StockProvider;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -21,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import yahoofinance.Utils;
 
 import static com.udacity.stockhawk.R.id.symbol;
 
@@ -54,12 +59,11 @@ public class StockWidgetIntentService extends RemoteViewsService {
             percentageFormat.setMinimumFractionDigits(2);
             percentageFormat.setPositivePrefix("+");
 
-
         }
 
         @Override
         public void onCreate(){
-            getData();
+
         }
 
         public void getData() {
@@ -67,10 +71,12 @@ public class StockWidgetIntentService extends RemoteViewsService {
             mCvList.clear();
 
             ContentResolver contentResolver = mApplicationContext.getContentResolver();
-
+            System.out.println("bop");
 
                Cursor cursor = contentResolver.query(Contract.Quote.URI, null, null, null, null);
+            System.out.println("bip" + cursor);
 
+            if (cursor != null) {
                 while (cursor.moveToNext()) {
 
                     String symbol = cursor.getString(cursor.getColumnIndex(Contract.Quote.COLUMN_SYMBOL));
@@ -87,8 +93,10 @@ public class StockWidgetIntentService extends RemoteViewsService {
 
                     mCvList.add(cv);
                 }
+            }
 
-                cursor.close();
+
+            cursor.close();
         }
 
         @Override
@@ -128,8 +136,6 @@ public class StockWidgetIntentService extends RemoteViewsService {
             return views;
         }
 
-
-
         @Override
         public RemoteViews getLoadingView() {
             return null;
@@ -149,7 +155,101 @@ public class StockWidgetIntentService extends RemoteViewsService {
         public boolean hasStableIds() {
             return true;
         }
+
     }
 
 
 }
+
+
+/*
+
+public class StockWidgetIntentService extends RemoteViewsService {
+    @Override
+    public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        return new RemoteViewsFactory() {
+            private Cursor data = null;
+            @Override
+            public void onCreate() {
+                // Nothing to do
+            }
+            @Override
+            public void onDataSetChanged() {
+                if (data != null) {
+                    data.close();
+                }
+                // This method is called by the app hosting the widget (e.g., the launcher)
+                // However, our ContentProvider is not exported so it doesn't have access to the
+                // data. Therefore we need to clear (and finally restore) the calling identity so
+                // that calls use our process and permission
+                final long identityToken = Binder.clearCallingIdentity();
+                // This is the same query from MyStocksActivity
+                data = getContentResolver().query(
+                        Contract.Quote.URI,
+                        new String[] {
+                                Contract.Quote._ID,
+                                Contract.Quote.COLUMN_SYMBOL,
+                                Contract.Quote.COLUMN_PRICE,
+                                Contract.Quote.COLUMN_PERCENTAGE_CHANGE,
+                                Contract.Quote.COLUMN_ABSOLUTE_CHANGE,
+                                Contract.Quote.COLUMN_HISTORY
+                        },
+                        Contract.Quote.QUOTE_COLUMNS + " = ?",
+                        new String[]{"1"},
+                        null);
+                Binder.restoreCallingIdentity(identityToken);
+            }
+            @Override
+            public void onDestroy() {
+            }
+            @Override
+            public int getCount() {
+                return data == null ? 0 : data.getCount();
+            }
+            @Override
+            public RemoteViews getViewAt(int position) {
+                if (position == AdapterView.INVALID_POSITION ||
+                        data == null || !data.moveToPosition(position)) {
+                    return null;
+                }
+                // Get the layout
+                RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_stocks_small);
+                // Bind data to the views
+                views.setTextViewText(R.id.symbol, data.getString(data.getColumnIndex
+                        ("symbol")));
+                if (data.getInt(data.getColumnIndex(Contract.Quote.COLUMN_HISTORY)) == 1) {
+                    views.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
+                } else {
+                    views.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);
+                }
+
+                final Intent fillInIntent = new Intent();
+                fillInIntent.putExtra("symbol", data.getString(data.getColumnIndex(Contract.Quote.COLUMN_SYMBOL)));
+                views.setOnClickFillInIntent(R.id.list, fillInIntent);
+                return views;
+            }
+            @Override
+            public RemoteViews getLoadingView() {
+                return null; // use the default loading view
+            }
+            @Override
+            public int getViewTypeCount() {
+                return 1;
+            }
+            @Override
+            public long getItemId(int position) {
+                // Get the row ID for the view at the specified position
+                if (data != null && data.moveToPosition(position)) {
+                    final int QUOTES_ID_COL = 0;
+                    return data.getLong(QUOTES_ID_COL);
+                }
+                return position;
+            }
+            @Override
+            public boolean hasStableIds() {
+                return true;
+            }
+        };
+    }
+}
+*/
