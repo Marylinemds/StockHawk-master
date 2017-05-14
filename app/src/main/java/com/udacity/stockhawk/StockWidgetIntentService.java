@@ -101,7 +101,17 @@ public class StockWidgetIntentService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-        getData();
+            Thread thread = new Thread() {
+                public void run() {
+                    getData();
+                }
+            };
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+            }
+
         }
 
         @Override

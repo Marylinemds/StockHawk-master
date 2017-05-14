@@ -36,6 +36,7 @@
             android:exported="false" />
 
         <provider
+            android:grantUriPermissions="true"
             android:name=".data.StockProvider"
             android:authorities="com.udacity.stockhawk"
             android:exported="false" />
