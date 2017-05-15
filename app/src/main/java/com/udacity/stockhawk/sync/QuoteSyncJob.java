@@ -46,6 +46,7 @@ public final class QuoteSyncJob {
     private QuoteSyncJob() {
     }
 
+
     static void getQuotes(final Context context) {
 
         Timber.d("Running sync job");
@@ -76,12 +77,13 @@ public final class QuoteSyncJob {
 
             while (iterator.hasNext()) {
                 String symbol = iterator.next();
-
-
                 Stock stock = quotes.get(symbol);
-                StockQuote quote = stock.getQuote();
 
-                if (stock.getName() == null) {
+
+
+                boolean isNotAlpha = !symbol.matches("[a-zA-Z]+");
+
+                if (isNotAlpha || stock.getName()== null ){
 
 
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -97,6 +99,7 @@ public final class QuoteSyncJob {
 
                 } else {
 
+                    StockQuote quote = stock.getQuote();
                     float price = quote.getPrice().floatValue();
                     float change = quote.getChange().floatValue();
                     float percentChange = quote.getChangeInPercent().floatValue();
