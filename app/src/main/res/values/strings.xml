@@ -17,6 +17,8 @@
     <string name="default_stocks_microsoft" translatable="false">MSFT</string>
     <string name="default_stocks_facebook" translatable="false">FB</string>
 
+    <string name="stock_not_found" >We could not find this quote, please try again</string>
+
 
     <string name="action_change_units" translatable="false">@string/pref_display_mode_key</string>
 
@@ -26,7 +28,7 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
 
-    <string name="error_no_network">No network connectivity! Will load stock cursor when the network is available.</string>
+    <string name="error_no_network">It seems that there is no network connectivity! We will load the information as soon as the network is available.</string>
     <string name="error_no_stocks">No stocks added! Hit the floating action button to add one.</string>
 
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
